@@ -1,0 +1,2 @@
+[{"coddep": "utpl/ArduinoMega/sensor", "desdep": "Arduino Mega"},
+{"coddep": "utpl/IntelGalileo/sensor", "desdep": "Intel Galileo"}]

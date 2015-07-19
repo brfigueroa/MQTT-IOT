@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="app">
+<head>
+    <title>MQTT over Websockets</title>
+    <meta charset="utf-8"/>
+    <meta name = "viewport" content = "width=device-width,, user-scalable=no">
+    <script type="text/javascript" src="/js/mqttws31.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.10.1.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    
+    <script type="text/javascript">
+    google.load("visualization", "1", {packages: ["gauge"]});
+    google.setOnLoadCallback(drawChart);
+    google.setOnLoadCallback(drawChart2);
+    function drawChart2() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['RUIDO', 1]
+
+        ]);
+
+
+        var options1 = {
+            width: 400, height: 120,
+            redFrom: 500, redTo: 600,
+            yellowFrom: 450, yellowTo: 500,
+            minorTicks: 5, max: 1000,
+            min: 0
+
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
+
+        // chart.draw(data, options);
+
+        setInterval(function () {
+            data.setValue(0, 1, document.getElementById("numberMsg2").innerHTML);
+            chart.draw(data, options1);
+        }, 500);
+
+    }
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['LUZ', 1]
+
+        ]);
+
+
+        var options1 = {
+            width: 400, height: 120,
+            redFrom: 500, redTo: 600,
+            yellowFrom: 450, yellowTo: 500,
+            minorTicks: 5, max: 1000,
+            min: 0
+
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        // chart.draw(data, options);
+
+        setInterval(function () {
+            data.setValue(0, 1, document.getElementById("numberMsg1").innerHTML);
+            chart.draw(data, options1);
+        }, 500);
+
+    }
+      var client;
+      var form = document.getElementById("tutorial");
+      
+      function doConnect() {
+          client = new Messaging.Client("localhost", 8000, "ClientId"+ parseInt(Math.random() * 100, 10));
+          client.onConnect = onConnect;
+          client.onMessageArrived = onMessageArrived;
+          client.onConnectionLost = onConnectionLost;
+          client.connect({onSuccess:onConnect});
+      }
+      
+        function doSubscribe() {
+            var topic = document.getElementById("subscibir").value
+          client.subscribe(topic);
+      }
+      function doUnsubscribe() {
+            var topic = document.getElementById("subscibir").value
+          client.unsubscribe(topic);
+      }
+      function doSend() {
+            var publicar = document.getElementById("publicar").value
+            var value = document.getElementById("valor").value
+            message = new Messaging.Message(value);
+            message.destinationName = publicar;
+            client.send(message);
+      }
+
+      function doDisconnect() {
+          client.disconnect();
+          
+      }
+      
+      function onConnect() {
+          var form = document.getElementById("example");
+        
+      }
+      
+      function onConnectionLost(responseObject) {
+          var form = document.getElementById("example");
+          form.connected.checked= false;
+          if (responseObject.errorCode !== 0)
+              alert(client.clientId+"\n"+responseObject.errorCode);
+      }
+      
+      function onMessageArrived(message) {
+          var form = document.getElementById("example");
+
+          form.receiveMsg.value = message.payloadString;
+          var json = JSON.parse(message.payloadString);
+          var ad = json["device"].id;
+          var ad1 = json["device"].luz;
+          var ad2 = json["device"].sonido;
+          document.getElementById('numberMsg').innerHTML = ad;
+          document.getElementById('numberMsg1').innerHTML = ad1;
+          document.getElementById('numberMsg2').innerHTML = ad2;
+      }
+     function WebSocketTest()
+        {
+          if ("WebSocket" in window)
+          {
+            alert("WebSockets supported here!\r\n\r\nBrowser: " + navigator.userAgent );
+          }
+          else
+          {
+            // the browser doesn't support WebSockets
+            alert("WebSockets NOT supported here!\r\n\r\nBrowser: " + navigator.userAgent );
+          }
+        }
+      
+      </script>
+</head> 
+
+<body ng-controller="UbiGeoCrtl" topmargin="50" leftmargin="500" >
+
+  <h1>MQTT Sensors UTPL</h1>
+  
+  <p>MQTT (Message Queuing Telemetry Transport) es un protocolo de conectividad para sistemas M2M, su funcionamiento se basa en mensajes publish/subscribe extremadamente simple y liviano, fue diseñado para dispositivos que funcionan con restricciones de ancho de banda, alta latencia o redes poco confiables, dado lo anterior dentro de sus caracteristicas implementa un cierto grado de garantia en la entrega de los mensajes.</p>
+  <form id="example">
+    <fieldset>
+    <legend>Conectar Websockets</legend>
+        <input type="button" value="Conectar" onClick="doConnect(this.form); alert('Conectado')" name="Connect"/>
+        <input type="button" value="Desconectar" onClick="doDisconnect(this.form); alert('Desconectado')" name="Desconnect"/>
+        
+    </fieldset>
+    
+    <fieldset>
+    <legend>Topicos</legend>
+       
+     <label>Suscribirse: </label>
+        <select id="subscibir" name="so">
+            <option value="" selected="selected">- selecciona -</option>
+            <option value="utpl/IntelGalileo/sensor">Intel Galileo</option>
+            <option value="utpl/ArduinoMega/sensor">Arduino Mega</option>
+        </select>
+        <label>Publicar: </label>
+        <select id="publicar" name="so">
+            <option value="" selected="selected">- selecciona -</option>
+            <option value="utpl/IntelGalileo/led">Intel Galileo</option>
+            <option value="utpl/ArduinoMega/led">Arduino Mega</option>
+        </select>
+         <label>Valor: </label>
+        <select id="valor" name="so">
+            <option value="" selected="selected">- selecciona -</option>
+            <option value="ON">Encender LED</option>
+            <option value="OFF">Apagar LED</option>
+        </select>
+     </fieldset> 
+     
+     <fieldset>
+        <legend>Mqtt: Suscribirse/Publicar</legend>
+        <input type="button" value="Subscribir" onClick="doSubscribe(this.form)"/>
+        <input type="button" value="Publicar" onClick="doSend(this.form)"/>
+        <input type="button" value="Desuscribir" onClick="doUnsubscribe()"/>
+     </fieldset> 
+      <fieldset> 
+         <legend>Valores </legend>
+     <div  style="display: table; margin-right: auto; margin-left: auto;">
+        <table class="table table-striped" style="width: 200px;">
+            <tr>
+                <th></th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Id Device</td>
+                <td id="numberMsg"></td>
+            </tr>
+            <tr>
+                <td>Luz</td>
+                <td id="numberMsg1"></td>
+            </tr>
+            <tr>
+                <td>Sonido</td>
+                <td id="numberMsg2"></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    </fieldset> 
+    <textarea name="receiveMsg" rows="1" cols="0" disabled="disabled"></textarea>
+    </form>
+    
+    <div  style="display: table; margin-right: auto; margin-left: auto;">
+        <table border="0">
+        <tr>
+            <td>
+                <div align="center"  id="chart_div" style="width: 150px; height: 120px;"></div>  
+            </td>
+
+            <td>
+                <div align="center"  id="chart_div2" style="width: 150px; height: 120px;"></div>  
+            </td>
+        </tr>
+        </table>
+    </div>
+    <div class='table'>
+        <a href="javascript:WebSocketTest()">Run WebSocket test</a>
+    </div>
+    </body>
+</html>
