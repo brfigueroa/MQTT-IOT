@@ -1,0 +1,16 @@
+{
+  "name": "twittercliente",
+  "version": "1.0.0",
+  "description": "cliente para twitter el cual se conectara a un broker mqtt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mqtt",
+    "twitter",
+    "broker"
+  ],
+  "author": "Byron Figueroa",
+  "license": "ISC"
+}
