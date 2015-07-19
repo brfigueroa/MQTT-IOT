@@ -1,0 +1,20 @@
+{
+  "name": "mongo-client",
+  "version": "1.0.0",
+  "description": "cliente mqtt que almacena los datos de todos los topicos a los que esta subscrito en una base de datos MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.taw.utpl.edu.ec/brfigueroa/MQTT-IOT.git"
+  },
+  "keywords": [
+    "mqtt",
+    "mongoDB",
+    "subscribe"
+  ],
+  "author": "Byron F",
+  "license": "ISC"
+}
