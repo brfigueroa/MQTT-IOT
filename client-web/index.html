@@ -70,9 +70,11 @@
         }, 500);
 
     }
+
       var client;
+      var brokerIp == "192.168.0.12";
       var form = document.getElementById("tutorial");
-      
+      //funcion la cual permite   
       function doConnect() {
           client = new Messaging.Client("localhost", 8000, "ClientId"+ parseInt(Math.random() * 100, 10));
           client.onConnect = onConnect;
@@ -126,6 +128,7 @@
           document.getElementById('numberMsg1').innerHTML = ad1;
           document.getElementById('numberMsg2').innerHTML = ad2;
       }
+      // funcion que da a conocer si el navegagor funciona con websockets
      function WebSocketTest()
         {
           if ("WebSocket" in window)
