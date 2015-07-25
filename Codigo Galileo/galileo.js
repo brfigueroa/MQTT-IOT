@@ -13,6 +13,8 @@ devices:{
         pantalla :{driver:"upm-jhd1313m1", connection:"galileo"}
 },
 
+// funcion para que presente los valores en panatalla lcd 
+// que se encuentra conectada al dispositivo.
 escibirPantalla: function(message){
         var that=this;
         var str=message.toString();
@@ -25,14 +27,13 @@ escibirPantalla: function(message){
  that.pantalla.setCursor(0,0);
         that.pantalla.write(str);
         that.pantalla.setColor(0,255,0);
-//      that.pantalla.clear;
+
 },
 
 work: function(my){
 
 
         my.server.subscribe('utpl/IntelGalileo/led');
-
         my.server.on('message', function(topic,data){
                 console.log(topic+ ":" + data);
 
@@ -47,18 +48,15 @@ work: function(my){
         every((1).seconds(), function(){
 	 analogValue = my.luz.analogRead();
                 analogValue1 = my.temperatura.analogRead();
-        //      console.log("sensor de Luz: " + analogValue);
-        //      console.log("sensor de Ruido: " + analogValue1);
+        
                 var data = '{"device":{"id":"Galileo" ,"luz":';
-
                 var lums  = analogValue.toString();
                 var sonido = analogValue1.toString();
-
                 var data1 = data + lums + ',"sonido":'+ sonido +'}}' ;
+                
+                my.escibirPantalla("Luz: "+lums+"Sonido: "+sonido);
 
-                my.escibirPantalla("Luz:"+lums+"Sonido:"+sonido);
-        //      console.log(data1);
-
+                //publica un nuevo mensaje al topico
                 my.server.publish("utpl/IntelGalileo/sensor",data1);
 
         });
