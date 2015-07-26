@@ -1,4 +1,10 @@
-var Twit = require('twit')
+
+//Programa que perimte leer los mensajes que publica en twitter un usuario determinado
+// y publicar a un topico determinado si el mensaje publicado coincide con mensajes 
+// que estan establecidos en este programa.
+
+
+var Twit = require('twit');
 var mqtt = require('mqtt');
 // direccion en la cual esta el broker
 var serverMqtt = '192.168.1.13';
@@ -11,6 +17,7 @@ var mensaje2 = 'OFF';
 var puerto = 1883;
 
 //variables del apiKey de twitter
+// agregar sus key y Access_Token  o no podran leer los mensajes de twitter
 var T = new Twit({
 	consumer_key : 'your consumer_key'
 	,consumer_secret: 'your consumer_secret'

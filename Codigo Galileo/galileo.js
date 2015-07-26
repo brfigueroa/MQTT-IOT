@@ -1,3 +1,4 @@
+
 var Cylon = require('cylon')
 Cylon.robot({
         name: "Mr.Robot",
@@ -22,9 +23,8 @@ escibirPantalla: function(message){
                 str = str+"";
 
         }
-        that.pantalla.setCursor(0,0);
 
- that.pantalla.setCursor(0,0);
+        that.pantalla.setCursor(0,0);
         that.pantalla.write(str);
         that.pantalla.setColor(0,255,0);
 
@@ -32,32 +32,28 @@ escibirPantalla: function(message){
 
 work: function(my){
 
-
+        //se subscribe al topico especificado
         my.server.subscribe('utpl/IntelGalileo/led');
         my.server.on('message', function(topic,data){
-                console.log(topic+ ":" + data);
+        console.log(topic+ ":" + data);
+        // si el mensaje coincide enciende el led
+        if (data== "ON"){
+            my.led.turnOn();
+                // si el mensaje coincide apaga el led
+        }else if(data=="OFF"){
+            my.led.turnOff();
+        }
+});
 
-                if (data== "ON"){
-                        my.led.turnOn();
-                }else if(data=="OFF"){
-                        my.led.turnOff();
-                }
-        });
 
-
-        every((1).seconds(), function(){
-	 analogValue = my.luz.analogRead();
-                analogValue1 = my.temperatura.analogRead();
-        
-                var data = '{"device":{"id":"Galileo" ,"luz":';
-                var lums  = analogValue.toString();
-                var sonido = analogValue1.toString();
-                var data1 = data + lums + ',"sonido":'+ sonido +'}}' ;
-                
-                my.escibirPantalla("Luz: "+lums+"Sonido: "+sonido);
-
-                //publica un nuevo mensaje al topico
-                my.server.publish("utpl/IntelGalileo/sensor",data1);
+    every((1).seconds(), function(){
+        analogValue = my.luz.analogRead();
+        analogValue1 = my.temperatura.analogRead();
+        // mensaje que se publicara en formato Json
+        var data = '{"device":{"id":"Galileo" ,"luz":'analogValue.toString',"sonido": 'analogValue1.toString'}}';
+        my.escibirPantalla("Luz: "+lums+"Sonido: "+sonido);
+        //publica un nuevo mensaje al topico
+        my.server.publish("utpl/IntelGalileo/sensor",data);
 
         });
      }

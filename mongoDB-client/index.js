@@ -1,4 +1,4 @@
-//importaciones 2
+
 var mqtt = require('mqtt'),
 	mongoose = require('mongoose'),
 	winston = require('winston')
@@ -8,7 +8,7 @@ var mqtt = require('mqtt'),
  
  //revisar si existe el directorio
  if ( !fs.existsSync( logDir ) ) {
-	// Create the directory if it does not exist
+	// Crea un directorio si no existe
 	fs.mkdirSync( logDir );
 }
 
@@ -22,11 +22,16 @@ var mqtt = require('mqtt'),
     exitOnError: false
   });
 
-mongoose.connect('mongodb://localhost/sensores');
-var Sensor = mongoose.model('sensors', { name: String, fecha: Date, luz: String, sonido: String, dato : Object });
 
+mongoose.connect('mongodb://localhost/sensores');
+//
+var Sensor = mongoose.model('sensors', { name: String, fecha: Date, luz: String, sonido: String, dato : Object });
+//se crea un cliente MQTT
 client = mqtt.createClient(1883, '192.168.0.12');
 
+// se subscribe a todos lso topicos que esten x debajo de la jerarquia utpl/
+// esta da la oportunidad que se subscriba a topicos como
+// "utpl/sensor/arduinoMega" y "utpl/sensor/galileo"
 client.subscribe('utpl/#');
 
 var temperatura = {
@@ -34,8 +39,7 @@ var temperatura = {
 	valor: 23
 };
 
-//client.publish('utpl/node', JSON.stringify(temperatura));
-
+//maneja los mensajes entrantes de los topicos a los cuales esta subscrito
 client.on('message', function (topic, message) {
 	logger.log('info', 'Recibiendo datos de sensor', { topico: topic,  dato:  message.toString()});
 	//console.log(message.toString());
@@ -54,5 +58,4 @@ client.on('message', function (topic, message) {
 		logger.warn(e);
 	}
 	
-  //client.end();
 });

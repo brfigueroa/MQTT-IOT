@@ -1,7 +1,8 @@
+
 #include <SPI.h>
 //libreria que permita conectarse con MQTT
 #include <PubSubClient.h>
-
+//libreria que permite conectarse a una red a traves de la placa ethernet.
 #include <Ethernet.h>
 
 //direccion del broker
@@ -28,6 +29,7 @@ int pinLed = 7;
 int pinLuz = A1; //Sensor de LUZ
 int pinPoten = A0; // Potenciometro
 
+//buffer para el almacenamiento del mensaje de la funcion buildJson()
 char message_buff[100];
 
 void setup() {
@@ -84,10 +86,13 @@ void publicar () {
   delay(1000);
 
 }
+
 void subscrbir () {
   client.subscribe(MQTT_TOPIC_SUBSCRIBE);
 }
 
+//funcion que construye un mensaje con el formato Json
+// que publicara los valores de los sensores 
 String buildJson(int sensorValue, int sensorValue1) {
 
   String data = "{";
@@ -103,6 +108,7 @@ String buildJson(int sensorValue, int sensorValue1) {
   return data;
 }
 
+// funcion que maneja los mensajes que llegan del topico al cual se esta subscrito
 void callback(char* topic, byte* payload, unsigned int length) {
   int i;
 
