@@ -15,7 +15,7 @@
 // Topico al cual publicara el Arduino
 #define MQTT_TOPIC_PUBLISH   "utpl/ArduinoMega/sensor"
 
-//Direccion MAC
+//Direccion MAC de la placa ethernet
 byte mac[] = { 0x90, 0xA2, 0x01, 0x02, 0x03, 0x04 };
 
 // creando un objeto PubSubClient
@@ -33,7 +33,7 @@ int pinPoten = A0; // Potenciometro
 char message_buff[100];
 
 void setup() {
-  // put your setup code here, to run once:
+  // especificamos que el pin 7 sera de salida esto permitira apagarlo o encenderlo.
   pinMode(pinLed, OUTPUT);
 
   // inicializar consola de debug en Puerto 9600
@@ -45,7 +45,9 @@ void setup() {
   }
   Serial.print("IP:");
   Serial.println(Ethernet.localIP());
-  //
+  //se crea una instancia del cliente donde se especifica el broker al cual se conectara
+  //ademas del puerto, tambien especificamos un callback que es una funcion que se llama cuando llegan
+  //mensajes de los topicos a los que se esta subscrito si no se requiere callback, ajústelo a 0.
   client = PubSubClient(MQTT_SERVER_NAME, 1883, callback, eclient);
 
 }
@@ -54,6 +56,8 @@ void loop() {
   // put your main code here, to run repeatedly:
   int sensorValue = analogRead(pinLuz);
   int sensorValue1 = analogRead(pinPoten);
+  
+  // se verifica si el cliente esta conectado
   if (!client.connected()) {
     Serial.println("Conectando servidor MQTT");
 
@@ -61,7 +65,7 @@ void loop() {
       String json = buildJson(sensorValue, sensorValue1);
       char jsonStr[200];
       json.toCharArray(jsonStr, 200);
-
+  // el clienete se subcribe al topico 
       client.subscribe(MQTT_TOPIC_SUBSCRIBE);
       Serial.print("Intentando Enviar: \n");
       Serial.println(jsonStr);
@@ -76,6 +80,7 @@ void loop() {
   publicar();
   // subscrbir ();
 }
+// funcion que permite publicar sobre un topico
 void publicar () {
   int sensorValue = analogRead(pinLuz);
   int sensorValue1 = analogRead(pinPoten);
@@ -86,7 +91,7 @@ void publicar () {
   delay(1000);
 
 }
-
+// funcion que permite subscribirse a un topico.
 void subscrbir () {
   client.subscribe(MQTT_TOPIC_SUBSCRIBE);
 }
@@ -112,18 +117,19 @@ String buildJson(int sensorValue, int sensorValue1) {
 void callback(char* topic, byte* payload, unsigned int length) {
   int i;
 
-  // create character buffer with ending null terminator (string)
+  // crea un buffer de caracteres
   for (i = 0; i < length; i++) {
     message_buff[i] = payload[i];
   }
   message_buff[i] = '\0';
 
   String msgString = String(message_buff);
-
+//si el mensaje que recibe en igual a OFF, desactiva el LED
   if (msgString.equals("OFF")) {
     digitalWrite(pinLed, LOW);
     Serial.println("Apagando LED");
   }
+  //si el mensaje que recibe en igual a ON, activa el LED
   else if (msgString.equals("ON")) {
     digitalWrite(pinLed, HIGH);
     Serial.println("Encendiendo LED");
