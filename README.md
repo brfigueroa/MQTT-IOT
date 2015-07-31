@@ -16,7 +16,7 @@ Otros brokers que se pueden utilizar son los siguientes:
 * [HBMQTT](http://community.beerfactory.org/wiki/bin/view/HBMQTT/)
 
 ## Arduino:
-Para poder utilizar el protocolo [MQTT] (http://mqtt.org/) en Arduino primero se debe instalar la librería [pubsubclient] (https://github.com/knolleary/pubsubclient) que provee soporte para MQTT. 
+Para poder utilizar el protocolo [MQTT] (http://mqtt.org/) en Arduino primero se debe instalar la librería [pubsubclient] (https://github.com/knolleary/pubsubclient) que provee soporte para MQTT a la placa ethernet. 
 
 ## Intel Galileo:
 En el cliente Intel Galileo se trabajó con el framework [cylonjs] (http://cylonjs.com/) creamos un robot cylon, además este framework permite agregar la funcionalidad de MQTT, además de esto se instaló [Intel IoT](https://software.intel.com/es-es/iot/library/galileo-getting-started)que es una distribución de Linux la cual se ejecuta en el dispositivo Intel Galileo. 
