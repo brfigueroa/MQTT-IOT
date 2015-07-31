@@ -1,5 +1,6 @@
 
 var Cylon = require('cylon')
+//
 Cylon.robot({
         name: "Mr.Robot",
         connections:{
@@ -7,6 +8,7 @@ Cylon.robot({
         server:{adaptor: 'mqtt', host:'mqtt://192.168.0.12:1883'}
 },
 
+// dispositivos los cuales esta conectados al galileo
 devices:{
         luz:{ driver:  "analogSensor", pin: 0, connection:"galileo"},
         temperatura: { driver: "analogSensor", pin: 1, connection:"galileo"},
@@ -45,7 +47,7 @@ work: function(my){
         }
 });
 
-
+    //Espera un segundo para publicar cada mensaje.
     every((1).seconds(), function(){
         analogValue = my.luz.analogRead();
         analogValue1 = my.temperatura.analogRead();
