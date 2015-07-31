@@ -14,10 +14,10 @@ Otros brokers que se pueden utilizar son los siguientes:
 * [Eclipse Paho](http://www.eclipse.org/paho/)
 * [HBMQTT](http://community.beerfactory.org/wiki/bin/view/HBMQTT/)
 
-## Arduino:
+### Arduino:
 Para poder utilizar el protocolo [MQTT] (http://mqtt.org/) en Arduino primero se debe instalar la librería [pubsubclient] (https://github.com/knolleary/pubsubclient) que provee soporte para MQTT. 
 
-## Intel Galileo:
+### Intel Galileo:
 En el cliente Intel Galileo se trabajó con el framework [cylonjs] (http://cylonjs.com/) creamos un robot cylon, además este framework permite agregar la funcionalidad de MQTT, además de esto se instaló [Intel IoT](https://software.intel.com/es-es/iot/library/galileo-getting-started)que es una distribución de Linux la cual se ejecuta en el dispositivo Intel Galileo. 
 
 ## Librerias
@@ -66,7 +66,7 @@ Aunque hay una serie de opciones disponibles para los desarrolladores interesado
 #### Haskell
 * [mqtt-hs](http://hackage.haskell.org/package/mqtt-hs)
 
-####Java
+#### Java
 *  [Eclipse Paho Java](http://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.java.git/)
 *  [Xenqtt](http://xenqtt.sf.net) Includes a client library, mock broker for unit/integration testing, and applications to support enterprise needs like using a cluster of servers as a single client, an HTTP gateway, etc.
 *  [MeQanTT](https://github.com/AlbinTheander/MeQanTT)
